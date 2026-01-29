@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café Lumière - Display Board</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>☕ Café Lumière</h1>
+            <p class="tagline">Order Status Board</p>
+            <nav>
+                <a href="/">Order</a>
+                <a href="/kitchen">Kitchen</a>
+                <a href="/display">Display</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="display-board">
+                <div class="display-section">
+                    <h3>🔔 Ready for Pickup</h3>
+                    <div id="readyDisplay" class="display-list"></div>
+                </div>
+
+                <div class="display-section">
+                    <h3>👨‍🍳 Being Prepared</h3>
+                    <div id="preparingDisplay" class="display-list"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='display.js') }}"></script>
+</body>
+</html>
