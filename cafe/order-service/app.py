@@ -229,6 +229,16 @@ def update_order_status(order_number):
         print(f"Error updating order: {e}")
         return jsonify({'error': str(e)}), 500
 
+@app.errorhandler(404)
+def not_found(error):
+    """Handle 404 errors"""
+    return jsonify({'error': 'Endpoint not found'}), 404
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    """Handle 405 errors"""
+    return jsonify({'error': 'Method not allowed'}), 405
+
 if __name__ == '__main__':
     init_db()
     app.run(host='0.0.0.0', port=5001, debug=True)

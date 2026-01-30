@@ -2,14 +2,18 @@
 
 async function loadDisplayOrders() {
     try {
-        const response = await fetch('/api/orders');
+        const response = await fetch('/api/display/orders');
         if (response.ok) {
             const orders = await response.json();
             displayReadyOrders(orders.filter(o => o.status === 'ready'));
             displayPreparingOrders(orders.filter(o => o.status === 'preparing'));
+            clearErrorMessage();
+        } else {
+            showErrorMessage(`Error: ${response.status} ${response.statusText}`);
         }
     } catch (error) {
         console.error('Error loading orders:', error);
+        showErrorMessage(`Connection error: Unable to load orders`);
     }
 }
 
@@ -45,6 +49,21 @@ function displayPreparingOrders(orders) {
             <div style="font-size: 1.8em; margin-top: 10px; color: var(--preparing);">👨‍🍳 Preparing...</div>
         </div>
     `).join('');
+}
+
+function showErrorMessage(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+    }
+}
+
+function clearErrorMessage() {
+    const errorDiv = document.getElementById('errorMessage');
+    if (errorDiv) {
+        errorDiv.style.display = 'none';
+    }
 }
 
 // Auto-refresh every 3 seconds

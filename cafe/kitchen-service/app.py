@@ -131,6 +131,78 @@ def serve_order(order_number):
         print(f"Error serving order: {e}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/kitchen/orders/<order_number>/start', methods=['POST'])
+def start_order_post(order_number):
+    """POST endpoint to start preparing an order (wrapper around PUT /prepare)."""
+    try:
+        session = get_requests_session()
+        response = session.put(
+            f'{ORDER_SERVICE_URL}/orders/{order_number}',
+            json={'status': 'preparing'},
+            timeout=5
+        )
+        
+        if response.status_code == 200:
+            return jsonify(response.json()), 200
+        else:
+            return jsonify({'error': 'Failed to update order', 'details': response.text}), response.status_code
+    
+    except requests.exceptions.Timeout:
+        return jsonify({'error': 'Request timeout'}), 504
+    except requests.exceptions.ConnectionError:
+        return jsonify({'error': 'Cannot connect to order service'}), 503
+    except Exception as e:
+        print(f"Error starting order: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/kitchen/orders/<order_number>/ready', methods=['POST'])
+def ready_order_post(order_number):
+    """POST endpoint to mark order as ready (wrapper around PUT /ready)."""
+    try:
+        session = get_requests_session()
+        response = session.put(
+            f'{ORDER_SERVICE_URL}/orders/{order_number}',
+            json={'status': 'ready'},
+            timeout=5
+        )
+        
+        if response.status_code == 200:
+            return jsonify(response.json()), 200
+        else:
+            return jsonify({'error': 'Failed to update order', 'details': response.text}), response.status_code
+    
+    except requests.exceptions.Timeout:
+        return jsonify({'error': 'Request timeout'}), 504
+    except requests.exceptions.ConnectionError:
+        return jsonify({'error': 'Cannot connect to order service'}), 503
+    except Exception as e:
+        print(f"Error marking order ready: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/kitchen/orders/<order_number>/serve', methods=['POST'])
+def serve_order_post(order_number):
+    """POST endpoint to mark order as served (wrapper around PUT /serve)."""
+    try:
+        session = get_requests_session()
+        response = session.put(
+            f'{ORDER_SERVICE_URL}/orders/{order_number}',
+            json={'status': 'served'},
+            timeout=5
+        )
+        
+        if response.status_code == 200:
+            return jsonify(response.json()), 200
+        else:
+            return jsonify({'error': 'Failed to update order', 'details': response.text}), response.status_code
+    
+    except requests.exceptions.Timeout:
+        return jsonify({'error': 'Request timeout'}), 504
+    except requests.exceptions.ConnectionError:
+        return jsonify({'error': 'Cannot connect to order service'}), 503
+    except Exception as e:
+        print(f"Error serving order: {e}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/display/orders', methods=['GET'])
 def get_display_orders():
     """Get orders for display board (preparing and ready only)."""
@@ -150,6 +222,16 @@ def get_display_orders():
     except Exception as e:
         print(f"Error fetching display orders: {e}")
         return jsonify({'error': str(e)}), 500
+
+@app.errorhandler(404)
+def not_found(error):
+    """Handle 404 errors"""
+    return jsonify({'error': 'Endpoint not found'}), 404
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    """Handle 405 errors"""
+    return jsonify({'error': 'Method not allowed'}), 405
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5002, debug=True)

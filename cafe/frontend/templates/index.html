@@ -32,6 +32,9 @@
                         <button class="tab-btn active" onclick="switchCategory('coffee')">☕ Coffee</button>
                         <button class="tab-btn" onclick="switchCategory('pastry')">🥐 Pastries</button>
                         <button class="tab-btn" onclick="switchCategory('icecream')">🍦 Ice Cream</button>
+                        <button class="tab-btn" onclick="switchCategory('pizza')">🍕 Pizza</button>
+                        <button class="tab-btn" onclick="switchCategory('sandwich')">🥪 Sandwiches</button>
+                        <button class="tab-btn" onclick="switchCategory('dessert')">🍰 Desserts</button>
                     </div>
 
                     <!-- Menu Grid -->
@@ -68,6 +71,48 @@
                         <div id="icecream-items" class="category-grid">
                             {% for item in menu %}
                                 {% if item.category == 'icecream' %}
+                                <div class="menu-card" onclick="addItem({{ item.id }}, '{{ item.name }}', {{ item.price }})" data-item-id="{{ item.id }}">
+                                    <div class="card-icon">{{ item.icon }}</div>
+                                    <div class="card-name">{{ item.name }}</div>
+                                    <div class="card-price">€{{ "%.2f"|format(item.price) }}</div>
+                                    <div class="card-badge" id="badge-{{ item.id }}">0</div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <!-- Pizza Items -->
+                        <div id="pizza-items" class="category-grid">
+                            {% for item in menu %}
+                                {% if item.category == 'pizza' %}
+                                <div class="menu-card" onclick="addItem({{ item.id }}, '{{ item.name }}', {{ item.price }})" data-item-id="{{ item.id }}">
+                                    <div class="card-icon">{{ item.icon }}</div>
+                                    <div class="card-name">{{ item.name }}</div>
+                                    <div class="card-price">€{{ "%.2f"|format(item.price) }}</div>
+                                    <div class="card-badge" id="badge-{{ item.id }}">0</div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <!-- Sandwich Items -->
+                        <div id="sandwich-items" class="category-grid">
+                            {% for item in menu %}
+                                {% if item.category == 'sandwich' %}
+                                <div class="menu-card" onclick="addItem({{ item.id }}, '{{ item.name }}', {{ item.price }})" data-item-id="{{ item.id }}">
+                                    <div class="card-icon">{{ item.icon }}</div>
+                                    <div class="card-name">{{ item.name }}</div>
+                                    <div class="card-price">€{{ "%.2f"|format(item.price) }}</div>
+                                    <div class="card-badge" id="badge-{{ item.id }}">0</div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <!-- Dessert Items -->
+                        <div id="dessert-items" class="category-grid">
+                            {% for item in menu %}
+                                {% if item.category == 'dessert' %}
                                 <div class="menu-card" onclick="addItem({{ item.id }}, '{{ item.name }}', {{ item.price }})" data-item-id="{{ item.id }}">
                                     <div class="card-icon">{{ item.icon }}</div>
                                     <div class="card-name">{{ item.name }}</div>
