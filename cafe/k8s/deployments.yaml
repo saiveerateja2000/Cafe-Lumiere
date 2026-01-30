@@ -40,6 +40,34 @@ spec:
       labels:
         app: order-service
     spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: postgres:15-alpine
+        command:
+        - sh
+        - -c
+        - |
+          until pg_isready -h "$DB_HOST" -p "$DB_PORT"; do
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: cafe-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: cafe-config
+              key: DB_PORT
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cafe-secrets
+              key: DB_PASSWORD
+
       containers:
       - name: order-service
         image: cafe-lumiere/order-service:latest
@@ -72,6 +100,22 @@ spec:
             secretKeyRef:
               name: cafe-secrets
               key: DB_PASSWORD
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5001
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5001
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
         resources:
           requests:
             memory: "128Mi"
@@ -120,6 +164,22 @@ spec:
             configMapKeyRef:
               name: cafe-config
               key: ORDER_SERVICE_URL
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
         resources:
           requests:
             memory: "128Mi"
@@ -173,6 +233,22 @@ spec:
             configMapKeyRef:
               name: cafe-config
               key: KITCHEN_SERVICE_URL
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
         resources:
           requests:
             memory: "128Mi"
