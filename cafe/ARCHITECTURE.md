@@ -10,6 +10,38 @@ Café Lumière is a microservices-based café management application with three 
 
 ## System Architecture
 
+### Mermaid Architecture Diagram
+
+```mermaid
+flowchart TB
+     subgraph clients[Users and Clients]
+          customer[Customer Browser]
+          kitchen[Kitchen Dashboard]
+          board[Display Monitor]
+     end
+
+     subgraph frontend_service[Frontend Service :5000]
+          frontend[Flask + Jinja UI]
+          customer --> frontend
+          kitchen --> frontend
+          board --> frontend
+     end
+
+     subgraph backend[Backend Services]
+          order[Order Service :5001]
+          kitchen_api[Kitchen Service :5002]
+     end
+
+     subgraph data[Data Layer]
+          db[(PostgreSQL :5432)]
+     end
+
+     frontend -->|HTTP REST| order
+     frontend -->|HTTP REST| kitchen_api
+     kitchen_api -->|Status updates| order
+     order -->|SQL psycopg2| db
+```
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                          USERS & CLIENTS                             │
