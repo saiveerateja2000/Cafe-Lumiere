@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: cafe-lumiere
+spec:
+  selector:
+    app: frontend
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: cafe-lumiere
+spec:
+  selector:
+    app: user-service
+  ports:
+  - port: 80
+    targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  namespace: cafe-lumiere
+spec:
+  selector:
+    app: order-service
+  ports:
+  - port: 80
+    targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-service
+  namespace: cafe-lumiere
+spec:
+  selector:
+    app: health-service
+  ports:
+  - port: 80
+    targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: cafe-lumiere
+spec:
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432

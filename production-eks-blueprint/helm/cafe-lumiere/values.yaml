@@ -1,0 +1,26 @@
+global:
+  namespace: cafe-lumiere
+  imagePullPolicy: IfNotPresent
+
+frontend:
+  replicaCount: 3
+  image:
+    repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/cafe/frontend
+    tag: latest
+
+userService:
+  replicaCount: 3
+  image:
+    repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/cafe/user-service
+    tag: latest
+
+orderService:
+  replicaCount: 3
+  image:
+    repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/cafe/order-service
+    tag: latest
+
+ingress:
+  host: app.example.com
+  certificateArn: arn:aws:acm:us-east-1:123456789012:certificate/replace-me
+  wafArn: arn:aws:wafv2:us-east-1:123456789012:regional/webacl/replace-me

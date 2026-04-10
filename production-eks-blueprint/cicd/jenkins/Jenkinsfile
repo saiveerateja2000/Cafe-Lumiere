@@ -1,0 +1,34 @@
+pipeline {
+  agent any
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+    stage('Build/Test/Scan') {
+      steps {
+        sh 'echo Run tests and security scans'
+      }
+    }
+    stage('Build & Push ECR') {
+      steps {
+        sh 'echo Build images and push to ECR'
+      }
+    }
+    stage('Deploy Dev') {
+      steps {
+        sh 'echo Deploy to dev via kubectl/Argo sync'
+      }
+    }
+    stage('Promote') {
+      steps {
+        input message: 'Promote to staging/prod?'
+        sh 'echo Promote with approval and canary gates'
+      }
+    }
+  }
+  post {
+    failure {
+      sh 'echo Trigger rollback playbook'
+    }
+  }
+}

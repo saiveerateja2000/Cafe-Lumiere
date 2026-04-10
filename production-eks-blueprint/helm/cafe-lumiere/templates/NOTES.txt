@@ -1,0 +1,8 @@
+1. Install chart:
+   helm upgrade --install cafe-lumiere ./helm/cafe-lumiere -n cafe-lumiere --create-namespace
+
+2. Verify ingress:
+   kubectl get ingress -n cafe-lumiere
+
+3. Verify pods:
+   kubectl get pods -n cafe-lumiere

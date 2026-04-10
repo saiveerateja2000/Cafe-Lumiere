@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: cafe-lumiere
+data:
+  APP_ENV: production
+  LOG_LEVEL: info
+  USERS_API_BASE: /api/users
+  ORDERS_API_BASE: /api/orders
